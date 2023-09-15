@@ -1,0 +1,42 @@
+footer {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 4.4rem;
+    text-align: center;
+}
+
+.footer-icons {
+    width: 12.6rem;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer svg {
+    font-size: 24px;
+    color: black;
+}
+
+footer ul {
+    width: 30rem;
+    margin: 1.7rem auto;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 600px) {
+    footer {
+        padding: 30px;
+        text-align: center;
+    }
+    footer ul {
+        width: auto;
+        display: block;
+    }
+    footer ul li {
+        margin-bottom: 10px;
+    }
+}

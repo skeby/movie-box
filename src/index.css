@@ -1,13 +1,35 @@
 body {
   margin: 0;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.imdb-logo {
+  margin-right: 0.6rem;
+}
+
+header {
+  background-size: cover;
+  background-position: center;;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  padding: 0.6rem 5rem;
 }
 
 nav {
@@ -26,10 +48,11 @@ nav {
   margin-left: 1rem;
   border-radius: 50%;
   padding: 10px;
-  background-color: #BE123C;
+  background-color: #be123c;
 }
 
 #search-form {
+  display: none;
   position: relative;
 }
 
@@ -51,7 +74,7 @@ nav {
   color: white;
   display: inline-block;
   margin: 0 auto;
-  width: 30rem;
+  width: 12rem;
   height: 28px;
   border: 2px solid;
   background-color: rgba(0, 0, 0, 0);
@@ -65,17 +88,21 @@ nav {
   margin-top: 3rem;
   color: white;
   width: 30%;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .top-rated-movie-title {
   font-size: 3rem;
   font-weight: 700;
   line-height: 1;
+  margin-bottom: 1rem;
 }
 
-.top-rated-movie-overview, .watch-trailer {
+.top-rated-movie-overview {
   font-size: 14px;
   font-weight: 500;
+  margin: 1rem 0;
 }
 
 .watch-trailer-container {
@@ -83,8 +110,13 @@ nav {
   align-items: center;
   padding: 10px;
   width: 10rem;
-  border-radius: 10%;
-  background-color: #BE123C;
+  border-radius: 5px;
+  background-color: #be123c;
+}
+
+.watch-trailer {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .play-icon {
@@ -93,13 +125,14 @@ nav {
   width: 18px;
   margin-right: 10px;
   border: none;
-  background-color: #BE123C;
+  background-color: #be123c;
   color: white;
 }
 
 .featured-movies {
   max-width: 1000px;
   margin: 3rem auto;
+  padding: 2rem;
   position: relative;
 }
 
@@ -109,25 +142,25 @@ nav {
   color: black;
 }
 
-.featured-movies-detail {
-  display: inline-block;
-  vertical-align: center;
+.featured-movies-detail {  
+  padding-right: 6rem;
   right: 0;
   position: absolute;
   font-size: 18px;
   font-weight: 400;
-  color: #BE123C;
+  color: #be123c;
 }
 
 .movie-cards {
   display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1.8rem;
+  grid-template-columns: 1fr;
   margin-top: 3rem;
 }
 
 .movie-card {
-  width: 14rem;
+  margin: 0 auto;
+  width: 16rem;
   border: none;
 }
 
@@ -135,11 +168,11 @@ nav {
   padding: 4px 0;
 }
 
-.movie-country-and-release-date, 
-.movie-category{
+.movie-country-and-release-date,
+.movie-category {
   font-size: 12px;
   font-weight: 700;
-  color: #9CA3AF;
+  color: #9ca3af;
 }
 
 .movie-title {
@@ -152,4 +185,50 @@ nav {
   font-size: 12px;
   font-weight: 400;
   color: #111827;
+}
+
+@media (min-width: 578px) {   
+  .featured-movies {
+    margin: 3rem auto;
+  }
+
+  .movie-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 850px) {
+  #search-form {
+    display: block;
+  }
+
+  header {
+    padding: 0.6rem 5rem;
+  }
+
+  #search-bar {
+    width: 20rem;
+  }
+
+  .featured-movies {
+    margin: 3rem auto;
+  }
+
+  .movie-cards {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1030px) {
+  #search-bar {
+    width: 30rem;
+  }
+  .featured-movies {
+    max-width: 1200px;
+    margin: 3rem auto;
+  }
+
+  .movie-cards {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }

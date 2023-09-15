@@ -36,7 +36,7 @@ const SearchBar = ({ onSearch }) => {
         aria-describedby="search-addon"
       />
       <button type="submit" className="search-icon">
-        <FontAwesomeIcon icon={faSearch} className="my-icon" />
+        <FontAwesomeIcon icon={faSearch} />
       </button>
     </form>
   );
