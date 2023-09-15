@@ -34,11 +34,10 @@ const MovieDetailsPage = () => {
         setMovie(data);
       };
       fetchData();
-      
     }, [params.id]);
   } catch (error) {
     toast.error(
-      "An error occured while fetching movies. lease try again later"
+      "An error occured while fetching movies. Please try again later"
     );
     console.error(error);
   }
@@ -104,7 +103,7 @@ const MovieDetailsPage = () => {
                   </p>
                   <p>
                     <span>Writers:</span>&nbsp;
-                    <span>Jim Cash, Jack Epps Jr,  Peter Craig</span>
+                    <span>Jim Cash, Jack Epps Jr, Peter Craig</span>
                   </p>
                   <p>
                     <span>Stars:</span>&nbsp;

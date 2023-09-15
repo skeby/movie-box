@@ -3,7 +3,6 @@ import HomePage from './pages/HomePage';
 import MovieDetailsPage from './pages/MovieDetailsPage';
 import NotFoundPage from './pages/PageNotFound/index.js';
 
-
 function App() {
    return (
       <BrowserRouter>

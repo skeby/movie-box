@@ -15,10 +15,9 @@ import Loader from "../components/Loader";
 import SearchBar from "../components/SearchBar";
 import logo from "../assets/logo.svg";
 import imdb from "../assets/imdb.svg";
-import "../index.css";
-
 import getCategory from "../utils/getCategory";
 import getCountry from "../utils/getCountry";
+import "../index.css";
 
 const HomePage = () => {
   const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
@@ -28,7 +27,7 @@ const HomePage = () => {
 
   const fetchMovies = async (query) => {
     try {
-      // Set the fetch type to search if a query is passed as a parameter and sets it to discover if otherwise
+      // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "discover"
       const fetchType = query ? "search" : "discover";
       const {
         data: { results },
@@ -48,7 +47,7 @@ const HomePage = () => {
             },
           });
 
-          // Extract the necessary information (IMDb and Rotten Tomatoes ratings, country, category, etc.)
+          // Extract the necessary information (IMDb ratings, country, category and category)
           const imdbRating = (data.vote_average * 10).toFixed(1);
           const country = getCountry(data);
           const category = getCategory(data);
@@ -80,7 +79,7 @@ const HomePage = () => {
 
   const fetchTopRatedMovie = async () => {
     try {
-      // Fetch the most popular / top rated movies
+      // Fetch the most popular movies
       const {
         data: { results },
       } = await axios.get(`${API_URL}/movie/popular`, {
@@ -143,7 +142,7 @@ const HomePage = () => {
       <section className="featured-movies">
         <span className="featured-movies-title">Featured Movie</span>
         <span className="featured-movies-detail">
-          See more
+          See more {""}
           <FontAwesomeIcon icon={faChevronRight} />
         </span>
         <div className="movie-cards">

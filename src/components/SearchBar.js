@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import "../index.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+import "../index.css";
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState("");
