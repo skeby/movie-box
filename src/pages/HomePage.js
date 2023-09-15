@@ -28,10 +28,10 @@ const HomePage = () => {
   const fetchMovies = async (query) => {
     try {
       // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "discover"
-      const fetchType = query ? "search" : "discover";
+      const fetchType = query ? "search" : "top_rated";
       const {
         data: { results },
-      } = await axios.get(`${API_URL}/${fetchType}/movie`, {
+      } = await axios.get(fetchType === "top_rated" ? `${API_URL}/movie/${fetchType}` : `${API_URL}/${fetchType}/movie`, {
         params: {
           api_key: API_KEY,
           query: query,
@@ -79,10 +79,10 @@ const HomePage = () => {
 
   const fetchTopRatedMovie = async () => {
     try {
-      // Fetch the most popular movies
+      // Fetch the top rated movies
       const {
         data: { results },
-      } = await axios.get(`${API_URL}/movie/popular`, {
+      } = await axios.get(`${API_URL}/movie/top_rated`, {
         params: {
           api_key: API_KEY,
         },

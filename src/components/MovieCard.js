@@ -7,7 +7,7 @@ const MovieCard = ({ movie }) => {
   const IMAGE_PATH = "https://image.tmdb.org/t/p/original";
 
   return (
-    <Link to={`/movie/${movie.id}`}>
+    <Link to={`/movies/${movie.id}`}>
       <div className={"movie-card card"} data-testid="movie-card">
         {movie.poster_path ? (
           <img
