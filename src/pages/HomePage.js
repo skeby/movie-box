@@ -116,7 +116,7 @@ const HomePage = () => {
         >
           <nav>
             <img src={logo} alt="Logo"></img>
-            <SearchBar onSearch={fetchMovies} />
+            {!movies ? <Loader /> : <SearchBar onSearch={fetchMovies} />}
             <span className="nav-sign-in">
               Sign in
               <FontAwesomeIcon icon={faBars} className="nav-sign-in-icon" />
