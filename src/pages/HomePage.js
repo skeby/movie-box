@@ -27,7 +27,7 @@ const HomePage = () => {
 
   const fetchMovies = async (query) => {
     try {
-      // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "discover"
+      // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "top_rated"
       const fetchType = query ? "search" : "top_rated";
       const {
         data: { results },
