@@ -76,7 +76,7 @@ const HomePage = () => {
   };
 
   const renderMovies = () => {
-    const displayMovies = movies.slice(0, 10);
+    const displayMovies = movies;
     return displayMovies.map((movie) => (
       <MovieCard key={movie.id} movie={movie} />
     ));
