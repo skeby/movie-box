@@ -18,7 +18,7 @@ const MovieCard = ({ movie }) => {
           />
         ) : null}
         <div className="movie-country-and-release-date">
-          {movie.country}{", "}
+          {movie.country}
           <span data-testid="movie-release-date">{movie.release_date}</span>
         </div>
         <div className="movie-title" data-testid="movie-title">

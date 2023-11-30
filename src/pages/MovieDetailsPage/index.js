@@ -21,6 +21,8 @@ const MovieDetailsPage = () => {
   const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
   const API_URL = "https://api.themoviedb.org/3";
   const [movie, setMovie] = useState([]);
+  const [video, setVideo] = useState([]);
+  const [trailerUrl, setTrailerUrl] = useState("");
 
   try {
     useEffect(() => {
@@ -31,9 +33,26 @@ const MovieDetailsPage = () => {
             append_to_response: "credits",
           },
         });
+        const { video } = await axios.get(
+          `${API_URL}/movie/${params.id}/videos/`,
+          {
+            params: {
+              language: "en-US",
+              api_key: API_KEY,
+            },
+          }
+        );
         setMovie(data);
+        setVideo(video);
       };
       fetchData();
+      const trailer = video.results.find((video) => video.type === "Trailer");
+      if (trailer) {
+        const videoKey = trailer.key;
+        const videoUrl = `https://www.youtube.com/watch?v=${videoKey}`;
+        setTrailerUrl(videoUrl);
+      } else {
+      }
     }, [params.id]);
   } catch (error) {
     toast.error(
@@ -57,6 +76,13 @@ const MovieDetailsPage = () => {
               <div className="overlay"></div>
               <div className="play-trailer">
                 <div className="play">
+                  <iframe
+                    title="Movie Trailer"
+                    width="560"
+                    height="315"
+                    src={trailerUrl}
+                    allowFullScreen
+                  ></iframe>
                   <FontAwesomeIcon icon={faCirclePlay} />
                 </div>
                 <span>Watch Trailer</span>
