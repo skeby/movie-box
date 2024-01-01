@@ -19,7 +19,7 @@ import Loader from "../../components/Loader";
 const MovieDetailsPage = () => {
   const params = useParams();
   const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
-  const API_URL = "https://api.themoviedb.org/3";
+  const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movie, setMovie] = useState([]);
   const [video, setVideo] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
@@ -34,7 +34,7 @@ const MovieDetailsPage = () => {
           },
         });
         const { video } = await axios.get(
-          `${API_URL}/movie/${params.id}/videos/`,
+          `${API_URL}/movie/${params.id}/videos`,
           {
             params: {
               language: "en-US",
@@ -46,6 +46,7 @@ const MovieDetailsPage = () => {
         setVideo(video);
       };
       fetchData();
+      console.log("Video", video);
       const trailer = video.results.find((video) => video.type === "Trailer");
       if (trailer) {
         const videoKey = trailer.key;

@@ -21,7 +21,7 @@ import "../index.css";
 
 const HomePage = () => {
   const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
-  const API_URL = "https://api.themoviedb.org/3";
+  const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movies, setMovies] = useState([]);
   const [topRatedMovie, setTopRatedMovie] = useState([]);
 
