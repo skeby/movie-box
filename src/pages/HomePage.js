@@ -20,7 +20,6 @@ import getCountry from "../utils/getCountry";
 import "../index.css";
 
 const HomePage = () => {
-  const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
   const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movies, setMovies] = useState([]);
   const [topRatedMovie, setTopRatedMovie] = useState([]);
@@ -37,7 +36,6 @@ const HomePage = () => {
           : `${API_URL}/${fetchType}/movie`,
         {
           params: {
-            api_key: API_KEY,
             query: query,
           },
         }
@@ -47,7 +45,6 @@ const HomePage = () => {
         results.map(async (movie) => {
           const { data } = await axios.get(`${API_URL}/movie/${movie.id}`, {
             params: {
-              api_key: API_KEY,
               append_to_response: "release_dates",
             },
           });
@@ -88,9 +85,7 @@ const HomePage = () => {
       const {
         data: { results },
       } = await axios.get(`${API_URL}/movie/popular`, {
-        params: {
-          api_key: API_KEY,
-        },
+        params: {},
       });
 
       // Select a random movie from the results object and set it as the top rated movie

@@ -18,7 +18,6 @@ import Loader from "../../components/Loader";
 
 const MovieDetailsPage = () => {
   const params = useParams();
-  const API_KEY = "02d99523fc7b7ac4eca40e5e0aa9a4c8";
   const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movie, setMovie] = useState([]);
   const [video, setVideo] = useState([]);
@@ -29,7 +28,6 @@ const MovieDetailsPage = () => {
       const fetchData = async () => {
         const { data } = await axios.get(`${API_URL}/movie/${params.id}`, {
           params: {
-            api_key: API_KEY,
             append_to_response: "credits",
           },
         });
@@ -38,7 +36,6 @@ const MovieDetailsPage = () => {
           {
             params: {
               language: "en-US",
-              api_key: API_KEY,
             },
           }
         );
