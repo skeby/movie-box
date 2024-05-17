@@ -1,10 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCirclePlay,
   faStar,
   faChevronDown,
   faTicket,
@@ -15,42 +13,23 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./style.css";
 import Loader from "../../components/Loader";
+import axiosClient from "../../services/axiosClient";
 
 const MovieDetailsPage = () => {
   const params = useParams();
-  const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movie, setMovie] = useState([]);
-  const [video, setVideo] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState("");
 
   try {
     useEffect(() => {
       const fetchData = async () => {
-        const { data } = await axios.get(`${API_URL}/movie/${params.id}`, {
+        const { data } = await axiosClient.get(`/movie/${params.id}`, {
           params: {
             append_to_response: "credits",
           },
         });
-        const { video } = await axios.get(
-          `${API_URL}/movie/${params.id}/videos`,
-          {
-            params: {
-              language: "en-US",
-            },
-          }
-        );
         setMovie(data);
-        setVideo(video);
       };
       fetchData();
-      console.log("Video", video);
-      const trailer = video.results.find((video) => video.type === "Trailer");
-      if (trailer) {
-        const videoKey = trailer.key;
-        const videoUrl = `https://www.youtube.com/watch?v=${videoKey}`;
-        setTrailerUrl(videoUrl);
-      } else {
-      }
     }, [params.id]);
   } catch (error) {
     toast.error(
@@ -72,19 +51,6 @@ const MovieDetailsPage = () => {
                 alt=""
               />
               <div className="overlay"></div>
-              <div className="play-trailer">
-                <div className="play">
-                  <iframe
-                    title="Movie Trailer"
-                    width="560"
-                    height="315"
-                    src={trailerUrl}
-                    allowFullScreen
-                  ></iframe>
-                  <FontAwesomeIcon icon={faCirclePlay} />
-                </div>
-                <span>Watch Trailer</span>
-              </div>
             </div>
             <div className="movie-text">
               <div className="top">

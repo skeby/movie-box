@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronRight,
-  faBars,
-  faCirclePlay,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,33 +12,38 @@ import logo from "../assets/logo.svg";
 import imdb from "../assets/imdb.svg";
 import getCategory from "../utils/getCategory";
 import getCountry from "../utils/getCountry";
+import axiosClient from "../services/axiosClient";
+import useDebounce from "../hooks/useDebounce";
 import "../index.css";
 
 const HomePage = () => {
-  const API_URL = "https://movie-box-api-9yck.onrender.com";
   const [movies, setMovies] = useState([]);
   const [topRatedMovie, setTopRatedMovie] = useState([]);
+  const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const debouncedQuery = useDebounce(query, 1000);
 
-  const fetchMovies = async (query) => {
+  console.log(movies);
+  const fetchMovies = async () => {
     try {
       // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "popular"
-      const fetchType = query ? "search" : "popular";
+      setIsLoading(true);
+      const fetchType = debouncedQuery ? "search" : "popular";
       const {
         data: { results },
-      } = await axios.get(
-        fetchType === "popular"
-          ? `${API_URL}/movie/${fetchType}`
-          : `${API_URL}/${fetchType}/movie`,
+      } = await axiosClient.get(
+        fetchType === "popular" ? `/movie/${fetchType}` : `/${fetchType}/movie`,
         {
           params: {
-            query: query,
+            query: debouncedQuery,
           },
         }
       );
 
       const moviesWithDetails = await Promise.all(
         results.map(async (movie) => {
-          const { data } = await axios.get(`${API_URL}/movie/${movie.id}`, {
+          const { data } = await axiosClient.get(`/movie/${movie.id}`, {
             params: {
               append_to_response: "release_dates",
             },
@@ -63,6 +63,7 @@ const HomePage = () => {
           };
         })
       );
+      setIsLoading(false);
       setMovies(moviesWithDetails);
     } catch (error) {
       toast.error(
@@ -84,7 +85,7 @@ const HomePage = () => {
       // Fetch the top rated movies
       const {
         data: { results },
-      } = await axios.get(`${API_URL}/movie/popular`, {
+      } = await axiosClient.get(`/movie/popular`, {
         params: {},
       });
 
@@ -100,9 +101,27 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    fetchMovies();
     fetchTopRatedMovie();
+    const checkScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", checkScroll);
+
+    return () => {
+      window.removeEventListener("scroll", checkScroll);
+    };
   }, []);
+
+  useEffect(() => {
+    fetchMovies();
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    if (query) {
+      setIsLoading(true);
+    }
+  }, [query]);
 
   return (
     <div className="App">
@@ -111,42 +130,62 @@ const HomePage = () => {
       ) : (
         <header
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(https://image.tmdb.org/t/p/original/${topRatedMovie.backdrop_path})`,
+            background: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(https://image.tmdb.org/t/p/original/${topRatedMovie.backdrop_path})`,
+            height: !debouncedQuery ? "100vh" : "auto",
           }}
         >
-          <nav>
+          <nav
+            style={{
+              position: "sticky",
+              top: "0px",
+              zIndex: "1",
+              backgroundColor:
+                isScrolled || debouncedQuery ? "black" : "transparent",
+              transition: "background-color 0.5s ease",
+            }}
+          >
             <img src={logo} alt="Logo"></img>
-            {!movies ? <Loader /> : <SearchBar onSearch={fetchMovies} />}
+            {!movies ? (
+              <Loader />
+            ) : (
+              <SearchBar
+                onSearch={(searchTerm) => setQuery(searchTerm)}
+                query={query}
+              />
+            )}
             <span className="nav-sign-in">
               Sign in
               <FontAwesomeIcon icon={faBars} className="nav-sign-in-icon" />
             </span>
           </nav>
-          <div className="top-rated-movie">
-            <div className="top-rated-movie-title">{topRatedMovie.title}</div>
-            <div className="top-rated-movie-rating">
-              <img src={imdb} alt="IMDb Logo" className="imdb-logo"></img>
-              {(topRatedMovie.vote_average * 10).toFixed(1)} / 100
+          {!debouncedQuery && (
+            <div className="top-rated-movie">
+              <div className="top-rated-movie-title">{topRatedMovie.title}</div>
+              <div className="top-rated-movie-rating">
+                <img src={imdb} alt="IMDb Logo" className="imdb-logo"></img>
+                {(topRatedMovie.vote_average * 10).toFixed(1)} / 100
+              </div>
+              <div className="top-rated-movie-overview">
+                {topRatedMovie.overview}
+              </div>
+              <div className="watch-trailer-container">
+                <FontAwesomeIcon icon={faCirclePlay} className="play-icon" />
+                <div className="watch-trailer">WATCH TRAILER</div>
+              </div>
             </div>
-            <div className="top-rated-movie-overview">
-              {topRatedMovie.overview}
-            </div>
-            <div className="watch-trailer-container">
-              <FontAwesomeIcon icon={faCirclePlay} className="play-icon" />
-              <div className="watch-trailer">WATCH TRAILER</div>
-            </div>
-          </div>
+          )}
         </header>
       )}
 
       <section className="featured-movies">
-        <span className="featured-movies-title">Featured Movie</span>
-        <span className="featured-movies-detail">
-          See more {""}
-          <FontAwesomeIcon icon={faChevronRight} />
-        </span>
+        <div className="featured-movies-title">
+          <span>{debouncedQuery ? "Search results" : "Featured Movie"}</span>
+          {movies.length === 0 && (
+            <div className="no-result">{"   "} No movies found :(</div>
+          )}
+        </div>
         <div className="movie-cards">
-          {!movies ? <Loader /> : renderMovies()}
+          {isLoading ? <Loader /> : renderMovies()}
         </div>
       </section>
       <Footer />

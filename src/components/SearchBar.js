@@ -1,34 +1,16 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
 import "../index.css";
 
-const SearchBar = ({ onSearch }) => {
-  const [query, setQuery] = useState("");
-
-  const handleInputChange = (event) => {
-    setQuery(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSearch(query);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 13) {
-      handleSubmit(event);
-    }
-  };
-
+const SearchBar = ({ onSearch, query }) => {
+  // const debouncedQuery = useDebounce(query, 600);
 
   return (
-    <form onSubmit={handleSubmit} id="search-form">
+    <div>
       <input
         value={query}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
+        onChange={(e) => {
+          e.preventDefault();
+          onSearch(e.target.value);
+        }}
         type="search"
         id="search-bar"
         className="form-control rounded"
@@ -37,9 +19,9 @@ const SearchBar = ({ onSearch }) => {
         aria-describedby="search-addon"
       />
       <button type="submit" className="search-icon">
-        <FontAwesomeIcon icon={faSearch} />
+        {/* <FontAwesomeIcon icon={faSearch} /> */}
       </button>
-    </form>
+    </div>
   );
 };
 
