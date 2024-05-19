@@ -22,56 +22,9 @@ const HomePage = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const debouncedQuery = useDebounce(query, 1000);
+  const debouncedQuery = useDebounce(query, 500);
 
   console.log(movies);
-  const fetchMovies = async () => {
-    try {
-      // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "popular"
-      setIsLoading(true);
-      const fetchType = debouncedQuery ? "search" : "popular";
-      const {
-        data: { results },
-      } = await axiosClient.get(
-        fetchType === "popular" ? `/movie/${fetchType}` : `/${fetchType}/movie`,
-        {
-          params: {
-            query: debouncedQuery,
-          },
-        }
-      );
-
-      const moviesWithDetails = await Promise.all(
-        results.map(async (movie) => {
-          const { data } = await axiosClient.get(`/movie/${movie.id}`, {
-            params: {
-              append_to_response: "release_dates",
-            },
-          });
-
-          // Extract the necessary information (IMDb ratings, country, category and category)
-          const imdbRating = (data.vote_average * 10).toFixed(1);
-          const country = getCountry(data);
-          const category = getCategory(data);
-
-          // Return a new movie object with the extracted information
-          return {
-            ...movie,
-            imdbRating,
-            country,
-            category,
-          };
-        })
-      );
-      setIsLoading(false);
-      setMovies(moviesWithDetails);
-    } catch (error) {
-      toast.error(
-        "An error occured while fetching movies. Please try again later"
-      );
-      console.error(error);
-    }
-  };
 
   const renderMovies = () => {
     const displayMovies = movies;
@@ -114,6 +67,55 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        // Set the fetch type to "search" if a query is passed as a parameter, otherwise, set it to "popular"
+        setIsLoading(true);
+        const fetchType = debouncedQuery ? "search" : "popular";
+        const {
+          data: { results },
+        } = await axiosClient.get(
+          fetchType === "popular"
+            ? `/movie/${fetchType}`
+            : `/${fetchType}/movie`,
+          {
+            params: {
+              query: debouncedQuery,
+            },
+          }
+        );
+
+        const moviesWithDetails = await Promise.all(
+          results.map(async (movie) => {
+            const { data } = await axiosClient.get(`/movie/${movie.id}`, {
+              params: {
+                append_to_response: "release_dates",
+              },
+            });
+
+            // Extract the necessary information (IMDb ratings, country, category and category)
+            const imdbRating = (data.vote_average * 10).toFixed(1);
+            const country = getCountry(data);
+            const category = getCategory(data);
+
+            // Return a new movie object with the extracted information
+            return {
+              ...movie,
+              imdbRating,
+              country,
+              category,
+            };
+          })
+        );
+        setIsLoading(false);
+        setMovies(moviesWithDetails);
+      } catch (error) {
+        toast.error(
+          "An error occured while fetching movies. Please try again later"
+        );
+        console.error(error);
+      }
+    };
     fetchMovies();
   }, [debouncedQuery]);
 
@@ -179,10 +181,13 @@ const HomePage = () => {
 
       <section className="featured-movies">
         <div className="featured-movies-title">
-          <span>{debouncedQuery ? "Search results" : "Featured Movie"}</span>
-          {movies.length === 0 && (
-            <div className="no-result">{"   "} No movies found :(</div>
-          )}
+          <span>
+            {debouncedQuery
+              ? movies.length === 0
+                ? "No movies found :("
+                : "Search results"
+              : "Featured Movies"}
+          </span>
         </div>
         <div className="movie-cards">
           {isLoading ? <Loader /> : renderMovies()}

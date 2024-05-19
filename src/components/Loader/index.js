@@ -1,12 +1,12 @@
-import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-import spinner from "../../assets/Spinner-0.9s-223px.gif";
 import "./style.css";
 
 const Loader = () => {
   return (
     <div className="loader">
-      <img src={spinner} alt="Loading GIF"></img>
+      <FontAwesomeIcon icon={faSpinner} spin fontSize={"3rem"} color="white" />
     </div>
   );
 };

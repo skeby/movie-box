@@ -134,7 +134,7 @@ nav {
 .featured-movies {
   margin: 3rem auto;
   padding: 2rem;
-  max-width: 1000px;
+  /* max-width: 1000px; */
   position: relative;
 }
 
@@ -155,14 +155,15 @@ nav {
 
 .movie-cards {
   display: grid;
-  gap: 1.8rem;
-  grid-template-columns: 1fr;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   margin-top: 3rem;
 }
 
 .movie-card {
   margin: 0 auto;
   width: 16rem;
+  height: 100%;
   border: none;
 }
 
@@ -232,7 +233,7 @@ nav {
     width: 30rem;
   }
   .featured-movies {
-    max-width: 1200px;
+    max-width: 80%;
     margin: 3rem auto;
   }
 
