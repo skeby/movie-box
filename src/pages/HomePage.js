@@ -39,7 +39,9 @@ const HomePage = () => {
       const {
         data: { results },
       } = await axiosClient.get(`/movie/popular`, {
-        params: {},
+        params: {
+          append_to_response: "production_countries,genres"
+        },
       });
 
       // Select a random movie from the results object and set it as the top rated movie

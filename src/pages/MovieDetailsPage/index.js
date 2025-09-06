@@ -17,16 +17,17 @@ import axiosClient from "../../services/axiosClient";
 
 const MovieDetailsPage = () => {
   const params = useParams();
-  const [movie, setMovie] = useState([]);
+  const [movie, setMovie] = useState(null);
 
   try {
     useEffect(() => {
       const fetchData = async () => {
         const { data } = await axiosClient.get(`/movie/${params.id}`, {
           params: {
-            append_to_response: "credits",
+            append_to_response: "videos,credits",
           },
         });
+        console.log(data)
         setMovie(data);
       };
       fetchData();
